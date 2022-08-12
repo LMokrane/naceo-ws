@@ -3,23 +3,23 @@ import WebSocket, { createWebSocketStream } from 'ws';
 
 import config from './config.js';
 
+import mongodb from './mongodb.js';
+
+mongodb.initClientDbConnection();
+const messageSchema = new mongoose.Schema({
+  log: String
+});
+const Message = mongoose.model('Message', messageSchema);
+
 const wss = new WebSocket(`wss://${ config.host }`);
 
-wss.on('open', () => {
-  console.log('Connecte');
-});
+const messageStream = createWebSocketStream(wss, { encoding: 'utf8' });
 
-let id = 0;
+async function run() {
+  for await (let data of messageStream) {
+    const message = new Message({ log: data });
+    await message.save();
+  }
+}
 
-wss.on('message', () => {
-  id += 1;
-  const duplex = createWebSocketStream(wss, { encoding: 'utf8' });
-  const fichier = `${ config.path }/log_${ id }`;
-  console.log(`fichier ${ fichier } cree`);
-  const writer = fs.createWriteStream(fichier);
-  duplex.pipe(writer);
-});
-
-wss.on('close', () => {
-  console.log('Deconnecte');
-});
+await run();
