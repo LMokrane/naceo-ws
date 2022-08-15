@@ -1,3 +1,4 @@
 node_modules
 .vagrant
 app/logs
+db
