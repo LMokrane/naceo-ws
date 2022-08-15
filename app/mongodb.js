@@ -11,7 +11,6 @@ const Message = mongoose.model('Message', messageSchema);
 const initClientDbConnection = async (url) => {
   try {
     const cnx = await mongoose.connect('mongodb://'+ url, clientOptions);
-    console.log('Connected');
     return Message;
   } catch (error) {
     console.log(error);
