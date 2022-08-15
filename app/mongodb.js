@@ -1,16 +1,22 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const clientOptions = {
-  seNewUrlParser : true,
-  dbName : 'websocket'
+  useNewUrlParser: true,
+  dbName: 'websocket'
 };
 
-exports.initClientDbConnection = async () => {
+const messageSchema = new mongoose.Schema({ log: 'string' });
+const Message = mongoose.model('Message', messageSchema);
+
+const initClientDbConnection = async (url) => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/mongo', clientOptions);
+    const cnx = await mongoose.connect('mongodb://'+ url, clientOptions);
     console.log('Connected');
+    return Message;
   } catch (error) {
     console.log(error);
     throw error;
   }
-}
+};
+
+export default initClientDbConnection;
