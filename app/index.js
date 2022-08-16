@@ -10,21 +10,21 @@ const logger = bunyan.createLogger({
       type: 'rotating-file',
       period: '1d',
       count: 3,
-      path: `${ config.path }/logs/debug.log`
+      path: `${ config.path }/debug.log`
     },
     {
       level: 'error',
       type: 'rotating-file',
       period: '1d',
       count: 3,
-      path: `${ config.path }/logs/error.log`
-    }
+      path: `${ config.path }/error.log`
+    },
     {
       level: 'info',
       type: 'rotating-file',
       period: '1d',
       count: 3,
-      path: `${ config.path }/logs/info.log`
+      path: `${ config.path }/info.log`
     }
   ]
 });
