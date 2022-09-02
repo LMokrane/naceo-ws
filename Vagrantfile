@@ -5,6 +5,14 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox"
 
+  config.vm.provision :shell,
+    path: "bootstrap.sh",
+    privileged: true
+
+  config.vm.synced_folder ".",
+    "/vagrant",
+    disabled: false
+
   config.vm.define "app" do |app|
     app.vm.provision "docker" do |d|
       d.post_install_provision "shell",
