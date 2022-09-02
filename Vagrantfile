@@ -7,9 +7,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "app" do |app|
     app.vm.provision "docker" do |d|
+      d.post_install_provision "shell",
+        inline: "docker volume create naceo-websocket"
       d.build_image "/vagrant/app" " -t naceo/websocket:1.2"
       d.run "naceo/websocket:1.2",
-        args: "-v /vagrant/app:/home/node/app"
+        auto_assign_name: false,
+        args: "--mount source=naceo-ws,destination=/home/node/app --name naceo-ws"
 
       d.pull_images "mongo:4.4.6"
       d.post_install_provision "shell",
