@@ -33,15 +33,24 @@ import WebSocket, { createWebSocketStream } from 'ws';
 
 import mongodb from './mongodb.js';
 const urlMongodb = `${ config.mongodb.host }:${ config.mongodb.port }`;
+const mongoDbName = config.mongodb.dbname;
 logger.debug({ urlMongodb: urlMongodb });
-
-const wss = new WebSocket(`wss://${ config.host }`);
-const messageStream = createWebSocketStream(wss, { encoding: 'utf8' });
 
 async function run() {
   logger.info('début app');
+  let messageStream = null;
   try {
-    const Message = await mongodb(urlMongodb);
+    logger.info('connexion au websocket...');
+    const wss = new WebSocket(`wss://${ config.host }:${ config.port }`);
+    messageStream = await createWebSocketStream(wss, { encoding: 'utf8' });
+    logger.info('connecté au websocket');
+  } catch(err) {
+    logger.error(err);
+  }
+
+  try {
+    logger.info('connexion à mongodb...');
+    const Message = await mongodb(urlMongodb, mongoDbName);
     logger.info('connecté à mongodb');
     for await (let data of messageStream) {
       logger.debug({ log: data });
@@ -54,4 +63,4 @@ async function run() {
   }
 }
 
-await run();
+run();
