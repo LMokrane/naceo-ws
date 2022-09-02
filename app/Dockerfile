@@ -2,8 +2,7 @@ FROM node:18
 
 WORKDIR /home/node/app
 COPY . .
-RUN mkdir -p logs && npm i && chown -R node:node /home/node/app
+RUN npm i --omit=dev && chown -R node:node /home/node/app
 USER node
 
-EXPOSE 3000
 CMD [ "npm", "start" ]
