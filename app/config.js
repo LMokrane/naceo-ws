@@ -3,7 +3,7 @@ const config = {
   port: 9001,
   path: "./logs",
   mongodb: {
-    host: "172.17.0.3",
+    host: "192.168.56.5",
     port: 27017
   }
 };
