@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
-const clientOptions = {
-  useNewUrlParser: true,
-  dbName: 'websocket'
-};
-
 const messageSchema = new mongoose.Schema({ log: 'string' });
 const Message = mongoose.model('Message', messageSchema);
 
-const initClientDbConnection = async (url) => {
+const initClientDbConnection = async (url, dbname) => {
+  const clientOptions = {
+    useNewUrlParser: true,
+    dbName: dbname
+  };
+
   try {
-    const cnx = await mongoose.connect('mongodb://'+ url, clientOptions);
+    const cnx = await mongoose.connect(`mongodb://${ url }`, clientOptions);
     return Message;
   } catch (error) {
     console.log(error);
